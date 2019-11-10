@@ -121,22 +121,22 @@ def crop(img, xmin, xmax, ymin, ymax):
 
 
 def extract_cards(board_img, background_thres=0.25, verb=True):
-    """Return a list of individual cards.bkup from an image of the board.
+    """Return a list of individual cards from an image of the board.
 
     Parameters
     ----------
     board_img : numpy array
         image of the board
         Assumption: 
-            - cards.bkup are aligned horizontally and vertically to the edges of the image
-            - background is darker enough (test and try to quantify the min contrast)
+            - cards are aligned horizontally and vertically to the edges of the image
+            - background is darker enough (TODO: test and try to quantify the min contrast)
     background_thres : float in [0, 1]
-        value to discriminate the background from the mean of pattern inside the cards.bkup
+        value to discriminate the background from the mean of pattern inside the cards
 
     Returns
     -------
-    cards.bkup : list of numpy arrays
-        the individual cards.bkup
+    cards : list of numpy arrays
+        the individual cards
 
     """
 
@@ -150,5 +150,5 @@ def extract_cards(board_img, background_thres=0.25, verb=True):
             cropped = crop(board_img, *(xcut.tolist() + ycut.tolist()))
             cards.append(cropped)
     if verb:
-        print("{0} cards.bkup segmented.".format(len(cards)))
+        print("{0} cards segmented.".format(len(cards)))
     return cards
