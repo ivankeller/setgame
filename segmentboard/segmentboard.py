@@ -30,16 +30,14 @@ def binarize_image(img):
 
 
 def add_frame(img, width=10, value=0):
-    """Change values of the edge pixels to a given values
-
-    Pixels at a distance less or equal to 'witdh' are set to 'value' for the four edges.
+    """Change values of the edge pixels to a given values.
 
     Parameters
     ----------
     img : 2d numpy.ndarray
-        input 1-channel image
+        input 1-channel image, shape (w, h)
     width : int, optional
-        width of the frame
+        width of the frame in pixels
     value : int, optional
 
     Returns
