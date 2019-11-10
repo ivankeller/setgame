@@ -1,0 +1,10 @@
+import os
+import unittest
+
+
+class TestBaseClass(unittest.TestCase):
+    DIR_PATH = os.path.dirname(os.path.abspath(__file__))
+    RESOURCES_DIR = os.path.join(DIR_PATH, 'resources')
+
+    def __init__(self, *args, **kwargs):
+        super(TestBaseClass, self).__init__(*args, **kwargs)
