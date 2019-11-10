@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 opencv-python = "*"
 scipy = "*"
+ipykernel = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"
