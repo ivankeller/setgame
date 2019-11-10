@@ -2,7 +2,7 @@
 Module to segment a board of cards into individual cards.
 Assumption: 
     - cards are aligned horizontally and vertically to the edges of the image
-    - the background is darker enough (test and try to quantify the min contrast)
+    - the background is darker enough (TODO: test and try to quantify the minimum required contrast)
 """
 
 import cv2
@@ -15,13 +15,13 @@ def binarize_image(img):
 
     Parameters
     ----------
-    img : numpy array
+    img : numpy.ndarray
         RBG image
 
     Returns
     -------
-    bin_image : numpy array
-        binarized image, 0 and 1 values
+    bin_image : numpy.ndarray
+        binarized image, only 0 and 1 values
 
     """
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -30,21 +30,21 @@ def binarize_image(img):
 
 
 def add_frame(img, width=10, value=0):
-    """Change edge pixels to a specific value.
+    """Change values of the edge pixels to a given values
 
-    The pixels at a distance less than 'witdh' from the four image edges are set to 'value' (default: 0, black).
+    Pixels at a distance less or equal to 'witdh' are set to 'value' for the four edges.
 
     Parameters
     ----------
-    img : 2d numpy array
+    img : 2d numpy.ndarray
         input 1-channel image
-    width : int (optional)
+    width : int, optional
         width of the frame
-    value : int (optional)
+    value : int, optional
 
     Returns
     -------
-    framed : 2d numpy array
+    framed : 2d numpy.ndarray
 
     """
     framed = img.copy()
