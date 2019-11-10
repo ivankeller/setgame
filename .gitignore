@@ -35,7 +35,7 @@ wheels/
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit tests / coverage reports
 htmlcov/
 .tox/
 .coverage
@@ -113,8 +113,8 @@ ENV/
 notebooks/scratch.ipynb
 *.DS_Store
 
-# test data
-test/test_data/
+# tests data
+tests/test_data/
 
 # sqlite db
 labelcards/app.db

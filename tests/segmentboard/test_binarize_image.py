@@ -1,7 +1,8 @@
+import unittest
 import cv2
 import os
 
-from test.test_base_class import TestBaseClass
+from tests.test_base_class import TestBaseClass
 from segmentboard.segmentboard import binarize_image
 
 
@@ -11,12 +12,12 @@ class TestBinarizeImage(TestBaseClass):
         self.binarized = binarize_image(self.img)
 
     def test_binary(self):
-        # only 0 and 1 values in image
+        """ Only 0 and 1 values in image"""
         distinct_values = set(self.binarized.flatten())
         self.assertEqual(distinct_values, set([0, 1]))
 
     def test_dimensions(self):
-        # if img.shape is (w, h, 3) for RGB format then binarized.shape should be (w, h)
+        """ If img.shape is (w, h, 3) for RGB format then binarized.shape should be (w, h)."""
         self.assertEqual(self.img.shape[:2], self.binarized.shape)
 
 
