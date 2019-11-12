@@ -10,6 +10,7 @@ opencv-python = "*"
 scipy = "*"
 ipykernel = "*"
 matplotlib = "*"
+loguru = "*"
 
 [requires]
 python_version = "3.7"
