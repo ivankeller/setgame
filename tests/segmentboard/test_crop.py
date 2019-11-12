@@ -1,7 +1,11 @@
+import unittest
 import numpy as np
+from tests.test_base_class import TestBaseClass
 from segmentboard.segmentboard import crop
 
-
-def test_crop():
-    img_test = np.arange(20).reshape((4, 5))
-    assert (crop(img_test, 2, 5, 0, 2) == np.array([[2, 3, 4], [7, 8, 9]])).all()
+class TestCrop(TestBaseClass):
+    def test_crop(self):
+        img = np.arange(20).reshape((4, 5))
+        cropped = crop(img, 2, 5, 0, 2)
+        expected = np.array([[2, 3, 4], [7, 8, 9]])
+        np.testing.assert_array_equal(cropped, expected)
