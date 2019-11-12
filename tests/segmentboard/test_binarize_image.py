@@ -8,7 +8,7 @@ from segmentboard.segmentboard import binarize_image
 
 class TestBinarizeImage(TestBaseClass):
     def setUp(self):
-        self.img = cv2.imread(os.path.join(self.RESOURCES_DIR, 'lenas_128.png'))
+        self.img = cv2.imread(os.path.join(self.FIXTURES_DIR, 'lenas_128.png'))
         self.binarized_img = binarize_image(self.img)
 
     def test_binary(self):
