@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
-
 """
-Segment cards in a given board image and save to a given directory.
-type ./segment_cards.py -h for more information
+Script for segmenting cards from a given board image and save the card images to a given directory.
+Usage:
+$ ./segment_cards_from_board_image.py -i <input_image> -o <output_dir>
+For help do:
+$ ./segment_cards_from_board_image.py -h
 """
 
 import getopt
 import os
 import sys
-
-import cv2
-from scipy import misc
-
-from segmentboard.segmentboard import extract_cards
-from utils.format import bgr2rgb
+from segmentboard.segmentboard import segment_board
 
 
 def usage(command, more):
     print(more)
     print("Usage:")
     print(command, "-i input_image -o output_dir")
-    print("Segmen board of cards into individual cards and save to given path.")
+    print("Segment board of cards into individual cards and save to output directory.")
     print("-i path \t path to a jpeg or png image of a board of cards.")
     print("-o path \t path to a valid output directory.")
     print("-h (optional)     \t display this usage message.")
@@ -51,19 +48,13 @@ def parse_args(argv):
     if not(os.path.exists(inputpath)):
         sys.exit(' '.join(['Input path error:', inputpath, 'does not exist.']))
     if not(os.path.exists(outputdir)):
-        sys.exit(' '.join(['Output path error:', outputdir, 'does not exist.']))
-    return (inputpath, outputdir)
+        os.mkdir(outputdir)
+    return inputpath, outputdir
 
 
 def main(argv):
     input_board_image_path, outputdir = parse_args(argv)
-    basename = os.path.split(input_board_image_path)[1].split('.')[0]
-    board_img = bgr2rgb(cv2.imread(input_board_image_path))
-    cards = extract_cards(board_img, verb=False)
-    for i, card in enumerate(cards):
-        card_path = os.path.join(outputdir, "{0}_{1}.png".format(basename, i))
-        misc.imsave(card_path, card)
-    print("Saved {0} cards.bkup to directory {1}".format(len(cards), outputdir))
+    segment_board(input_board_image_path, outputdir, format='jpg')
 
 
 if __name__ == "__main__":
