@@ -21,3 +21,10 @@ pipenv shell
 ```bash
 python -m unittest discover -v
 ```
+
+## segment cards from board image  
+from the root directory of this project do:
+```bash
+export PYTHONPATH=.
+./scripts/segment_cards_from_board_image.py <input board image> <output directory>
+```
