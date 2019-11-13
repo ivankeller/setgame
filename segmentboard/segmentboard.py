@@ -178,6 +178,8 @@ def extract_cards(board_img, background_thres=0.25, max_ratio=3):
             - background is darker enough (TODO: test and try to quantify the min contrast)
     background_thres : float in [0, 1]
         value to discriminate the background from the mean of pattern inside the cards
+    max_ratio : float, optional
+        maximum image dimension ratio to be accepted as a proper card image
 
     Returns
     -------
