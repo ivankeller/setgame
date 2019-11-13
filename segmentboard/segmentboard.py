@@ -182,10 +182,10 @@ def segment_board(board_path, output_dir, background_thres=0.25, format='jpg'):
     """
     basename = os.path.split(board_path)[1].split('.')[0]
     board_img = read_image(board_path)
-    logger.info(f'Read board image at {board_path}')
+    logger.info(f'Read board image at {os.path.abspath(board_path)}')
     cards = extract_cards(board_img, background_thres)
     for i, card in enumerate(cards):
         card_path = os.path.join(output_dir, f'{basename}_{i}.{format}')
         imageio.imwrite(card_path, card)
-        logger.debug(f"Saved {card_path}")
-    logger.info(f"Saved {len(cards)} cards to directory {output_dir}")
+        logger.debug(f"Saved {os.path.abspath(card_path)}")
+    logger.info(f"Saved {len(cards)} cards to directory {os.path.abspath(output_dir)}")
