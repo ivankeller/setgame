@@ -6,6 +6,8 @@ Assumption:
 """
 
 import cv2
+import imageio
+import os
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter1d
 from loguru import logger
@@ -155,3 +157,35 @@ def extract_cards(board_img, background_thres=0.25):
             cards.append(cropped)
     logger.info(f"{len(cards)} cards segmented from board image.")
     return cards
+
+
+def segment_board(board_path, output_dir, background_thres=0.25, format='jpg'):
+    """Segment cards from a image of a board of cards and save them to a directory.
+
+    The file name of the board is used to create the individual card file names.
+
+    Parameters
+    ----------
+    board_path : str
+        input image path of the board of cards
+    output_dir : str
+        output directory to save the segmented card images
+    background_thres : float in [0, 1], optional
+        parameter for discriminating the image background from the mean of pattern inside the cards
+    format : {'jpg', 'png'}, optional
+        output format, '.png' format is slow and takes disk space
+
+    Returns
+    -------
+    output_dir : str
+
+    """
+    basename = os.path.split(board_path)[1].split('.')[0]
+    board_img = read_image(board_path)
+    logger.info(f'Read board image at {board_path}')
+    cards = extract_cards(board_img, background_thres)
+    for i, card in enumerate(cards):
+        card_path = os.path.join(output_dir, f'{basename}_{i}.{format}')
+        imageio.imwrite(card_path, card)
+        logger.debug(f"Saved {card_path}")
+    logger.info(f"Saved {len(cards)} cards to directory {output_dir}")
