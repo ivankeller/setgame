@@ -149,8 +149,24 @@ def turn(img, orient='portrait'):
     else:
         return img
 
+def img_ratio(img):
+    """Return ratio long edge / short edge.
 
-def extract_cards(board_img, background_thres=0.25):
+    Parameters
+    ----------
+    img : 3d numpy.ndarray
+
+    Returns
+    -------
+    float
+        ratio long edge / short edge
+
+    """
+    r, c = img.shape[:2]
+    return max(r, c) / min (r, c)
+
+
+def extract_cards(board_img, background_thres=0.25, max_ratio=3):
     """Return a list of individual segmented cards from an image of a board of cards.
 
     Parameters
@@ -177,7 +193,8 @@ def extract_cards(board_img, background_thres=0.25):
     for xcut in xs_cuts:
         for ycut in ys_cuts:
             cropped = crop(board_img, *(xcut.tolist() + ycut.tolist()))
-            cards.append(cropped)
+            if img_ratio(cropped) < max_ratio:
+                cards.append(cropped)
     logger.info(f"{len(cards)} cards segmented from board image.")
     return cards
 
