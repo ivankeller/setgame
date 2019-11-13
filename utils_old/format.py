@@ -6,7 +6,7 @@ def bgr2rgb(img):
 
     Parameters
     ----------
-    img : numpy array
+    img : 3d numpy.ndarray
         BGR image as returned by cv2.imread(file)
 
     Returns
