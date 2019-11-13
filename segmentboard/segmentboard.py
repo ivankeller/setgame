@@ -127,6 +127,29 @@ def crop(img, xmin, xmax, ymin, ymax):
     return img[ymin:ymax, xmin:xmax]
 
 
+def turn(img, orient='portrait'):
+    """Turn image to match required orientation
+
+    Parameters
+    ----------
+    img : 2d or 3d numpy.ndarray
+        input image
+    orient : {'portrait', 'landscape'}
+
+    Returns
+    -------
+    2d or 3d numpy.array
+
+    """
+    # first two dimensions of img
+    height, width = img.shape[:2]
+    to_turn = (orient == 'portrait' and height < width) or (orient == 'landscape' and height > width)
+    if to_turn:
+        return np.rot90(img)
+    else:
+        return img
+
+
 def extract_cards(board_img, background_thres=0.25):
     """Return a list of individual segmented cards from an image of a board of cards.
 
@@ -159,7 +182,7 @@ def extract_cards(board_img, background_thres=0.25):
     return cards
 
 
-def segment_board(board_path, output_dir, background_thres=0.25, format='jpg'):
+def segment_board(board_path, output_dir, background_thres=0.25, img_format='jpg', img_orientation='portrait'):
     """Segment cards from a image of a board of cards and save them to a directory.
 
     The file name of the board is used to create the individual card file names.
@@ -172,8 +195,10 @@ def segment_board(board_path, output_dir, background_thres=0.25, format='jpg'):
         output directory to save the segmented card images
     background_thres : float in [0, 1], optional
         parameter for discriminating the image background from the mean of pattern inside the cards
-    format : {'jpg', 'png'}, optional
+    img_format : {'jpg', 'png'}, optional
         output format, '.png' format is slow and takes disk space
+    img_orientation : {'portrait', 'landscape'}, optional
+        orientation of the saved card images
 
     Returns
     -------
@@ -185,7 +210,8 @@ def segment_board(board_path, output_dir, background_thres=0.25, format='jpg'):
     logger.info(f'Read board image at {os.path.abspath(board_path)}')
     cards = extract_cards(board_img, background_thres)
     for i, card in enumerate(cards):
-        card_path = os.path.join(output_dir, f'{basename}_{i}.{format}')
+        card = turn(card, orient=img_orientation)
+        card_path = os.path.join(output_dir, f'{basename}_{i}.{img_format}')
         imageio.imwrite(card_path, card)
         logger.debug(f"Saved {os.path.abspath(card_path)}")
     logger.info(f"Saved {len(cards)} cards to directory {os.path.abspath(output_dir)}")

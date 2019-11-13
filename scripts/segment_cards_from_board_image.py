@@ -54,7 +54,7 @@ def parse_args(argv):
 
 def main(argv):
     input_board_image_path, outputdir = parse_args(argv)
-    segment_board(input_board_image_path, outputdir, format='jpg')
+    segment_board(input_board_image_path, outputdir, img_format='jpg')
 
 
 if __name__ == "__main__":
