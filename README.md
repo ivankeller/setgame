@@ -62,6 +62,8 @@ Segment cards for all board images in a given directory:
     ```bash
     ./scripts/segment_all_board_images.py
     ```
+    
+As example and explanation of how the board segmenter works see this notebook: https://github.com/ivankeller/setgame/blob/master/notebooks/segmentboard_demo.ipynb
 
 
 
