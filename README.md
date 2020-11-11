@@ -52,9 +52,9 @@ From the root directory of this project do:
 ```bash
 export PYTHONPATH=.
 ```
-Segment cards from a single board image:
+Segment cards from a single board image (JPEG or PNG):
 ```bash
-./scripts/segment_cards_from_board_image.py <input board image> <output directory>
+./scripts/segment_cards_from_board_image.py -i <input board image> -o <output directory>
 ```
 Segment cards for all board images in a given directory:  
 - edit file `./scripts/segment_all_board_images.py` adapting paths
