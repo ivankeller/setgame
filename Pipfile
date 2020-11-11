@@ -12,6 +12,7 @@ ipykernel = "*"
 matplotlib = "*"
 loguru = "*"
 imageio = "*"
+ipywidgets = "*"
 
 [requires]
 python_version = "3.7"
