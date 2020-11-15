@@ -2,7 +2,7 @@ import unittest
 import cv2
 import os
 
-from tests.test_base_class import TestBaseClass
+from tests.testbase_class import TestBaseClass
 from segmentboard.segmentboard import binarize_image
 
 

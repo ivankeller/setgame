@@ -2,7 +2,7 @@ from enum import Enum
 from IPython.display import display, Image
 from ipywidgets import Button, ToggleButtons, HTML, Output
 from typing import List
-from base_class.label import Color, Number, Shape, Shading, Label
+from base_classes.label import Color, Number, Shape, Shading, Label
 from utils import list_images_in_directory
 
 

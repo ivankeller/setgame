@@ -1,5 +1,5 @@
 import unittest
-from tests.test_base_class import TestBaseClass
+from tests.testbase_class import TestBaseClass
 import utils
 
 

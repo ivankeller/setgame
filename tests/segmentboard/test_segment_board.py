@@ -4,7 +4,7 @@ import cv2
 import shutil
 import os
 
-from tests.test_base_class import TestBaseClass
+from tests.testbase_class import TestBaseClass
 from segmentboard.segmentboard import segment_board
 from loguru import logger
 
