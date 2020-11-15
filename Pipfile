@@ -13,6 +13,7 @@ matplotlib = "*"
 loguru = "*"
 imageio = "*"
 ipywidgets = "*"
+jupytext = "*"
 
 [requires]
 python_version = "3.7"
