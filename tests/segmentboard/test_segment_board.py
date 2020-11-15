@@ -13,7 +13,7 @@ class TestSegmentBoard(TestBaseClass):
 
     def test_segment_board(self):
         # arrange
-        jpg_board_img_path = os.path.join(self.FIXTURES_DIR, 'test_board.jpg')
+        jpg_board_img_path = os.path.join(self.RESOURCE_DIR, 'test_board.jpg')
         output_dir = tempfile.mkdtemp()
 
         # act
