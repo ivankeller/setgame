@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 from dataclasses import dataclass, asdict
 
@@ -38,4 +39,9 @@ class Label:
         for attribute, value in label_dict.items():
             label_dict[attribute] = value.value
         return label_dict
+
+    def as_json(self):
+        label_dict = self.as_dict()
+        return json.dumps(label_dict)
+
 

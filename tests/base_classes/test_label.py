@@ -23,6 +23,20 @@ class TestLabel(TestBaseClass):
         }
         self.assertDictEqual(result, expected)
 
+    def test_as_json(self):
+        # arrange
+        one_label = label.Label(
+            number=label.Number.ONE,
+            color=label.Color.RED,
+            shape=label.Shape.OVAL,
+            shading=label.Shading.OPEN
+        )
+        # act
+        result = one_label.as_json()
+        # assert
+        expected = '{"number": "1", "color": "red", "shape": "oval", "shading": "open"}'
+        self.assertEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
