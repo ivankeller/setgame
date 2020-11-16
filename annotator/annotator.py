@@ -1,9 +1,11 @@
+import os
 import json
+from loguru import logger
 from enum import Enum
 from IPython.display import display, Image
 from ipywidgets import Button, ToggleButtons, HTML, Output
 from typing import List
-from base_classes.label import Attribute, Color, Number, Shape, Shading, Label
+from base_classes.label import Attribute, Color, Number, Shape, Shading
 from utils import list_images_in_directory
 
 
@@ -13,6 +15,9 @@ class ButtonName(Enum):
     SHAPE = Attribute.SHAPE.value
     SHADING = Attribute.SHADING.value
     SUBMIT = 'SUBMIT'
+
+
+DEFAULT_OUTPUT_SUBDIR = 'labels'
 
 
 class Annotator:
@@ -27,9 +32,10 @@ class Annotator:
 
     """
 
-    def __init__(self, examples):
+    def __init__(self, examples, output_dir=None):
         self.examples = Annotator.list_examples_to_annotate(examples)
-        self.cursor = -1
+        self.output_dir = self.set_output_dir(output_dir)
+        self.cursor = 0
         self.annotations = []
         self.progress_message = HTML()
         self.output_message = Output()
@@ -52,6 +58,22 @@ class Annotator:
         nb_remaining = len(self.examples) - self.cursor
         self.progress_message.value = f'{nb_annotations} example(s) annotated, {nb_remaining} example(s) remaining'
 
+    def set_output_dir(self, output_dir: str) -> str:
+        """Set output directory for annotations.
+
+        Parameters
+        ----------
+        output_dir : str
+
+        """
+        if output_dir is None:
+            parent_dir = os.path.dirname(self.examples[0])
+            output_dir = os.path.join(parent_dir, DEFAULT_OUTPUT_SUBDIR)
+        output_dir = os.path.abspath(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
+        logger.info(f'created output directory: {output_dir}')
+        return output_dir
+
     @staticmethod
     def list_examples_to_annotate(examples):
         """
@@ -61,7 +83,7 @@ class Annotator:
         ----------
         examples : List[str] or str
             if list of strings: list of paths to image to annotate
-            if str: path to a directory containing images to annotate (wiht extension: jpg or png)
+            if str: path to a directory containing images to annotate (with extension: jpg or png)
 
         Returns
         -------
@@ -128,7 +150,6 @@ class Annotator:
         self.submit_button.disabled = True
 
     def show_next_example(self):
-        self.cursor += 1
         self.set_progression_message()
         if self.cursor >= len(self.examples):
             self.disable_all_buttons()
@@ -148,11 +169,13 @@ class Annotator:
                 print(f"Missing value for {missing_attributes}. Retry.")
         else:
             with self.output_message:
-                #annotation = '-'.join([response.value for response in list(responses.values())])
-                annotation = Annotator.get_annotation(responses)
-                self.annotations.append((self.examples[self.cursor], annotation))
+                annotation = Annotator.get_annotation_as_json_string(responses)
+                current_example = self.examples[self.cursor]
+                self.annotations.append((current_example, annotation))
+                self.save_annotation(annotation, current_example)
                 print(f"Annotation submitted: {annotation}")
             self.initialize_label_buttons()
+            self.cursor += 1
             self.show_next_example()
 
     def get_label_buttons_responses(self):
@@ -160,10 +183,19 @@ class Annotator:
         return {att: button.value for att, button in self.label_buttons.items()}
 
     @staticmethod
-    def get_annotation(response):
+    def get_annotation_as_json_string(response):
         """Get label buttons responses as json string."""
         annotation = {att: button_response.value for att, button_response in response.items()}
         return json.dumps(annotation)
+
+    def save_annotation(self, annotation, example):
+        """Save annotation as json file"""
+        basename = os.path.splitext(os.path.basename(example))[0]
+        destination_path = os.path.join(self.output_dir, basename + '.json')
+        with open(destination_path, 'w') as destination:
+            destination.write(annotation + '\n')
+            logger.info(f'annotation saved to {destination_path}')
+
 
     @staticmethod
     def get_missing_attributes(responses):
