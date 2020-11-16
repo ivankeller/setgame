@@ -27,7 +27,7 @@ examples = [
 #examples = '../../datatest/examples_for_annotator'
 # -
 
-# # run the annotation
+# ## run the annotator
 
 import sys
 sys.path.append('..')
