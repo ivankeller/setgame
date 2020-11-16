@@ -4,7 +4,7 @@ from loguru import logger
 from enum import Enum
 from IPython.display import display, Image
 from ipywidgets import Button, ToggleButtons, HTML, Output
-from typing import List
+from typing import List, Dict, Union
 from base_classes.label import Attribute, Color, Number, Shape, Shading
 from utils import list_images_in_directory
 
@@ -23,12 +23,15 @@ DEFAULT_OUTPUT_SUBDIR = 'labels'
 class Annotator:
     """
     Interactive Ipython widget for annotating Set cards images.
+    Annotations are iteratively saved as json files.
 
     Attributes
     ----------
     examples : List[str] or str
         if list of strings: list of paths to image to annotate
         if str: path to a directory containing images to annotate (jpg or png)
+    output_dir : str
+        directory to save annotations, if None (default) save to default sub-directory
 
     """
 
@@ -43,7 +46,7 @@ class Annotator:
         self.label_buttons, self.submit_button = self.make_all_buttons()
 
     def annotate(self):
-        """Run the annotation widgets"""
+        """Run the annotation widgets."""
         self.set_progression_message()
         display(self.progress_message)
         display(self.output_image)
@@ -59,13 +62,7 @@ class Annotator:
         self.progress_message.value = f'{nb_annotations} example(s) annotated, {nb_remaining} example(s) remaining'
 
     def set_output_dir(self, output_dir: str) -> str:
-        """Set output directory for annotations.
-
-        Parameters
-        ----------
-        output_dir : str
-
-        """
+        """Set output directory. If None set to default sub-directory."""
         if output_dir is None:
             parent_dir = os.path.dirname(self.examples[0])
             output_dir = os.path.join(parent_dir, DEFAULT_OUTPUT_SUBDIR)
@@ -75,9 +72,9 @@ class Annotator:
         return output_dir
 
     @staticmethod
-    def list_examples_to_annotate(examples):
+    def list_examples_to_annotate(examples: Union[List[str], str]) -> List[str]:
         """
-        Return list path to images to annotate.
+        Return list of paths to images to annotate.
 
         Parameters
         ----------
@@ -100,13 +97,13 @@ class Annotator:
             raise TypeError("Wrong argument type.")
 
     @staticmethod
-    def make_all_buttons():
+    def make_all_buttons() -> (Dict[str, ToggleButtons], Button):
         """Build all necessary buttons.
 
         Return
         ------
-        buttons : dict of {str: ToggleButtons}, Button
-            label buttons (for number, color, shape and shading), submit button
+        buttons : (dict of {str: ToggleButtons}, Button)
+            label buttons (for number, color, shape and shading) and submit button
 
         """
         number_button = ToggleButtons(
@@ -178,17 +175,17 @@ class Annotator:
             self.cursor += 1
             self.show_next_example()
 
-    def get_label_buttons_responses(self):
-        """Return a dictionary of label buttons value."""
+    def get_label_buttons_responses(self) -> Dict[str, Union[Number, Color, Shape, Shading]]:
+        """Return label buttons values."""
         return {att: button.value for att, button in self.label_buttons.items()}
 
     @staticmethod
-    def get_annotation_as_json_string(response):
+    def get_annotation_as_json_string(response: Dict[str, Union[Number, Color, Shape, Shading]]) -> str:
         """Get label buttons responses as json string."""
         annotation = {att: button_response.value for att, button_response in response.items()}
         return json.dumps(annotation)
 
-    def save_annotation(self, annotation, example):
+    def save_annotation(self, annotation: str, example: str) -> None:
         """Save annotation as json file"""
         basename = os.path.splitext(os.path.basename(example))[0]
         destination_path = os.path.join(self.output_dir, basename + '.json')
@@ -196,9 +193,8 @@ class Annotator:
             destination.write(annotation + '\n')
             logger.info(f'annotation saved to {destination_path}')
 
-
     @staticmethod
-    def get_missing_attributes(responses):
+    def get_missing_attributes(responses: Dict[str, Union[Number, Color, Shape, Shading]]) -> List[str]:
         """Return the list of labels button's name without response."""
         missing = []
         for att, response in responses.items():
