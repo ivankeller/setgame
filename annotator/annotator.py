@@ -1,17 +1,18 @@
+import json
 from enum import Enum
 from IPython.display import display, Image
 from ipywidgets import Button, ToggleButtons, HTML, Output
 from typing import List
-from base_classes.label import Color, Number, Shape, Shading, Label
+from base_classes.label import Attribute, Color, Number, Shape, Shading, Label
 from utils import list_images_in_directory
 
 
 class ButtonName(Enum):
-    NUMBER = 'Number'
-    COLOR = 'Color'
-    SHAPE = 'Shape'
-    SHADING = 'Shading'
-    SUBMIT = 'Submit'
+    NUMBER = Attribute.NUMBER.value
+    COLOR = Attribute.COLOR.value
+    SHAPE = Attribute.SHAPE.value
+    SHADING = Attribute.SHADING.value
+    SUBMIT = 'SUBMIT'
 
 
 class Annotator:
@@ -33,9 +34,7 @@ class Annotator:
         self.progress_message = HTML()
         self.output_message = Output()
         self.output_image = Output()
-        self.buttons = self.make_all_buttons()
-        self.label_buttons = self.list_label_buttons()
-        self.submit_button = self.buttons[ButtonName.SUBMIT.value]
+        self.label_buttons, self.submit_button = self.make_all_buttons()
 
     def annotate(self):
         """Run the annotation widgets"""
@@ -51,7 +50,7 @@ class Annotator:
     def set_progression_message(self):
         nb_annotations = len(self.annotations)
         nb_remaining = len(self.examples) - self.cursor
-        self.progress_message.value = f'{nb_annotations} examples annotated, {nb_remaining} example remaining'
+        self.progress_message.value = f'{nb_annotations} example(s) annotated, {nb_remaining} example(s) remaining'
 
     @staticmethod
     def list_examples_to_annotate(examples):
@@ -78,64 +77,55 @@ class Annotator:
         else:
             raise TypeError("Wrong argument type.")
 
-    def list_label_buttons(self):
-        label_buttons = [
-            self.buttons[ButtonName.NUMBER.value],
-            self.buttons[ButtonName.COLOR.value],
-            self.buttons[ButtonName.SHAPE.value],
-            self.buttons[ButtonName.SHADING.value]
-        ]
-        return label_buttons
-
     @staticmethod
     def make_all_buttons():
         """Build all necessary buttons.
 
         Return
         ------
-        buttons : dict
-            key: str, buttons description name ('Color', 'Number', 'Submit', etc.)
-            value: Buttons or ToggleButtons
+        buttons : dict of {str: ToggleButtons}, Button
+            label buttons (for number, color, shape and shading), submit button
 
         """
         number_button = ToggleButtons(
-            options=[('1', Number.ONE.value), ('2', Number.TWO.value), ('3', Number.THREE.value)],
+            options=[('1', Number.ONE), ('2', Number.TWO), ('3', Number.THREE)],
             description=ButtonName.NUMBER.value,
         )
         color_button = ToggleButtons(
-            options=[('red', Color.RED.value), ('green', Color.GREEN.value), ('purple', Color.PURPLE.value)],
+            options=[('red', Color.RED), ('green', Color.GREEN), ('purple', Color.PURPLE)],
             description=ButtonName.COLOR.value,
         )
         shape_button = ToggleButtons(
-            options=[('oval', Shape.OVAL.value), ('diamond', Shape.DIAMOND.value), ('squiggle', Shape.SQUIGGLE.value)],
+            options=[('oval', Shape.OVAL), ('diamond', Shape.DIAMOND), ('squiggle', Shape.SQUIGGLE)],
             description=ButtonName.SHAPE.value,
         )
         shading_button = ToggleButtons(
-            options=[('open', Shading.OPEN.value), ('striped', Shading.STRIPED.value), ('solid', Shading.SOLID.value)],
+            options=[('open', Shading.OPEN), ('striped', Shading.STRIPED), ('solid', Shading.SOLID)],
             description=ButtonName.SHADING.value,
         )
         submit_button = Button(description=ButtonName.SUBMIT.value)
 
-        buttons = {
-            ButtonName.NUMBER.value: number_button,
-            ButtonName.COLOR.value: color_button,
-            ButtonName.SHAPE.value: shape_button,
-            ButtonName.SHADING.value: shading_button,
-            ButtonName.SUBMIT.value: submit_button
+        label_buttons = {
+            number_button.description: number_button,
+            color_button.description: color_button,
+            shape_button.description: shape_button,
+            shading_button.description: shading_button,
         }
-        return buttons
+        return label_buttons, submit_button
 
     def display_all_buttons(self):
-        for button in self.buttons.values():
+        for button in self.label_buttons.values():
             display(button)
+        display(self.submit_button)
 
     def initialize_label_buttons(self):
-        for button in self.label_buttons:
+        for button in self.label_buttons.values():
             button.value = None
 
     def disable_all_buttons(self):
-        for button in self.buttons.values():
+        for button in self.label_buttons.values():
             button.disabled = True
+        self.submit_button.disabled = True
 
     def show_next_example(self):
         self.cursor += 1
@@ -150,7 +140,7 @@ class Annotator:
             display(Image(self.examples[self.cursor], width=200))
 
     def on_button_clicked(self, but):
-        responses = self.get_label_buttons_response()
+        responses = self.get_label_buttons_responses()
         missing_attributes = Annotator.get_missing_attributes(responses)
         self.output_message.clear_output()
         if missing_attributes:
@@ -158,29 +148,28 @@ class Annotator:
                 print(f"Missing value for {missing_attributes}. Retry.")
         else:
             with self.output_message:
-                annotation = ''.join([response for response in list(responses.values())])
+                #annotation = '-'.join([response.value for response in list(responses.values())])
+                annotation = Annotator.get_annotation(responses)
                 self.annotations.append((self.examples[self.cursor], annotation))
                 print(f"Annotation submitted: {annotation}")
             self.initialize_label_buttons()
             self.show_next_example()
 
-    def get_label_buttons_response(self):
-        """Return a dictionary of the button values.
+    def get_label_buttons_responses(self):
+        """Return a dictionary of label buttons value."""
+        return {att: button.value for att, button in self.label_buttons.items()}
 
-        Returns
-        -------
-        dict
-            key: buttons description
-            value: button value, can be None if missing response
-
-        """
-        return {button.description: button.value for button in self.label_buttons}
+    @staticmethod
+    def get_annotation(response):
+        """Get label buttons responses as json string."""
+        annotation = {att: button_response.value for att, button_response in response.items()}
+        return json.dumps(annotation)
 
     @staticmethod
     def get_missing_attributes(responses):
-        """Return the list of button's name that without response."""
+        """Return the list of labels button's name without response."""
         missing = []
-        for attribute, response in responses.items():
+        for att, response in responses.items():
             if response is None:
-                missing.append(attribute)
+                missing.append(att)
         return missing
