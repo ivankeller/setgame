@@ -3,6 +3,13 @@ from enum import Enum
 from dataclasses import dataclass, asdict
 
 
+class Attribute(Enum):
+    NUMBER = 'number'
+    COLOR = 'color'
+    SHAPE = 'shape'
+    SHADING = 'shading'
+
+
 class Number(Enum):
     ONE = '1'
     TWO = '2'
@@ -29,10 +36,10 @@ class Shading(Enum):
 
 @dataclass
 class Label:
-    number: Number
-    color: Color
-    shape: Shape
-    shading: Shading
+    number: Number = None
+    color: Color = None
+    shape: Shape = None
+    shading: Shading = None
 
     def as_dict(self):
         label_dict = asdict(self)
