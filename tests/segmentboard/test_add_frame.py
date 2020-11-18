@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from tests.testbase_class import TestBaseClass
-from segmentboard.segmentboard import add_frame
+from setgame.segmentboard import add_frame
 
 
 class TestAddFrame(TestBaseClass):

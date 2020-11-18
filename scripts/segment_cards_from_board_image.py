@@ -10,7 +10,7 @@ $ ./segment_cards_from_board_image.py -h
 import getopt
 import os
 import sys
-from segmentboard.segmentboard import segment_board
+from setgame.segmentboard import segment_board
 
 
 def usage(command, more):

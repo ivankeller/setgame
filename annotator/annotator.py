@@ -5,8 +5,8 @@ from enum import Enum
 from IPython.display import display, Image
 from ipywidgets import Button, ToggleButtons, HTML, Output
 from typing import List, Dict, Union
-from base_classes.label import Attribute, Color, Number, Shape, Shading
-from utils import list_images_in_directory
+from setgame.base_classes.label import Attribute, Color, Number, Shape, Shading
+from setgame.utils import list_images_in_directory
 
 
 class ButtonName(Enum):
