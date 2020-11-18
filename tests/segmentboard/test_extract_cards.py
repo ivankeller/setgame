@@ -2,14 +2,14 @@ import unittest
 import cv2
 import os
 
-from tests.test_base_class import TestBaseClass
+from tests.testbase_class import TestBaseClass
 from segmentboard.segmentboard import extract_cards
 
 
 class TestExtractCards(TestBaseClass):
     def setUp(self):
-        self.jpg_img_path = os.path.join(self.FIXTURES_DIR, 'test_board.jpg')
-        self.png_img_path = os.path.join(self.FIXTURES_DIR, 'test_board.png')
+        self.jpg_img_path = os.path.join(self.RESOURCE_DIR, 'test_board.jpg')
+        self.png_img_path = os.path.join(self.RESOURCE_DIR, 'test_board.png')
 
     def _test_extract_cards(self, img_path):
         """Test on a test board image, nb of segmented cards and shapes."""

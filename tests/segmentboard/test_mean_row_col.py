@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from tests.test_base_class import TestBaseClass
+from tests.testbase_class import TestBaseClass
 from segmentboard.segmentboard import mean_row_col
 
 
