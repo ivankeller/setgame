@@ -5,10 +5,10 @@ and save the segmented card images to directory OUTPUT_DIR
 """
 
 import os
-import segment_cards_from_board_image
+from setgame.segmentboard.scripts import segment_cards_from_board_image
 
-INPUT_DIR = "/Users/ivankeller/Projects/setgame/data/raw/jpg"
-OUTPUT_DIR = "/Users/ivankeller/Projects/setgame/data/segmented_cards"
+INPUT_DIR = "/Users/ivankeller/Projects/setgame_project/data_for_tests/boards/png"
+OUTPUT_DIR = "/Users/ivankeller/Projects/setgame_project/data_for_tests/output_segmented"
 
 for board_img_file in os.listdir(INPUT_DIR):
     if os.path.splitext(board_img_file)[1] in ['.png', '.jpeg', '.jpg']:
