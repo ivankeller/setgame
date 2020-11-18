@@ -4,7 +4,7 @@ import shutil
 import os
 
 from tests.testbase_class import TestBaseClass
-from setgame.segmentboard import segment_board
+from setgame.segmentboard.segmentboard import segment_board
 from loguru import logger
 
 

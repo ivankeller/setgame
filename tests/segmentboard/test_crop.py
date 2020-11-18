@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from tests.testbase_class import TestBaseClass
-from setgame.segmentboard import crop
+from setgame.segmentboard.segmentboard import crop
 
 
 class TestCrop(TestBaseClass):

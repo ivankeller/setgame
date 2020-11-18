@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from tests.testbase_class import TestBaseClass
-from setgame.segmentboard import img_ratio
+from setgame.segmentboard.segmentboard import img_ratio
 
 
 class TestImgRatio(TestBaseClass):

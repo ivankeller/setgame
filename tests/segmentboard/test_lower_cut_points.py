@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from tests.testbase_class import TestBaseClass
-from setgame.segmentboard import lower_cut_points
+from setgame.segmentboard.segmentboard import lower_cut_points
 
 
 class TestLowerCutPoints(TestBaseClass):
