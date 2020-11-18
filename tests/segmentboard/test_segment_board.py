@@ -1,11 +1,10 @@
 import unittest
 import tempfile
-import cv2
 import shutil
 import os
 
 from tests.testbase_class import TestBaseClass
-from segmentboard.segmentboard import segment_board
+from setgame.segmentboard.segmentboard import segment_board
 from loguru import logger
 
 

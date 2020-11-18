@@ -1,6 +1,6 @@
 import unittest
 from tests.testbase_class import TestBaseClass
-from base_classes import label
+from setgame.base_classes import label
 
 
 class TestLabel(TestBaseClass):

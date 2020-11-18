@@ -1,6 +1,6 @@
 import unittest
 from tests.testbase_class import TestBaseClass
-import utils
+from setgame import utils
 
 
 class TestUtils(TestBaseClass):

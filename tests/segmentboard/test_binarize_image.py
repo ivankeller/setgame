@@ -3,7 +3,7 @@ import cv2
 import os
 
 from tests.testbase_class import TestBaseClass
-from segmentboard.segmentboard import binarize_image
+from setgame.segmentboard.segmentboard import binarize_image
 
 
 class TestBinarizeImage(TestBaseClass):

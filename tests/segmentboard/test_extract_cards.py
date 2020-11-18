@@ -3,7 +3,7 @@ import cv2
 import os
 
 from tests.testbase_class import TestBaseClass
-from segmentboard.segmentboard import extract_cards
+from setgame.segmentboard.segmentboard import extract_cards
 
 
 class TestExtractCards(TestBaseClass):

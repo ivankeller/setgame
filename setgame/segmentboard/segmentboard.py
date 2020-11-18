@@ -11,7 +11,7 @@ import os
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter1d
 from loguru import logger
-from utils import read_image
+from setgame.utils import read_image
 
 
 def binarize_image(img):
