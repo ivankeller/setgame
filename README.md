@@ -25,13 +25,15 @@ A card has 4 attributes. Each attribute can take 3 values:
 4. display the solution(s) on the original input image of the board of cards (ex: draw rectangles around the solution cards)
 
 ### 0.2 Approach to build the system
-1. make a custom image segmentator: from a image of a board of cards with arbitrary size, it should output the images of each individual card (done).
+1. make a custom image segmentator: from a image of a board of cards with arbitrary size, it should output the images of each individual card. Done
 2. train an image classifier to identify the values of the 4 attributes of a card:
     * prepare the dataset:
-        * use the image segmentator to get a set of numerous and diverse individual card images from several photos of board taken in different settings (background, lighting, etc.)
-        * manually label the cards
+        * make photos of boards taken in different settings (background, lighting, etc.) with all the different cards. Done.
+        * use the image segmentator built in 1. to obtain a set of numerous and diverse individual card images examples. Done.
+        * build a tool for annotating card images. Done: Setcard_annotator https://github.com/ivankeller/setcard_annotator
+        * manually label the cards images using Setcard_annotator
         * perform image augmentation to enrich the dataset (rotation, scaling, color, etc.)
-        # normalize images: size, white balance, etc.
+        * normalize images: size, white balance, etc.
     * train a multi-labels card classifier or 4 classifiers (one for each card attribute).
 3. Wrap all together into an application.
 4. Bonus: make the application to run live from a smartphone camera (Android or iOS)
