@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "setgame"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "opencv-python",
+    "scipy",
+    "ipykernel",
+    "matplotlib",
+    "loguru",
+    "imageio",
+    "ipywidgets",
+    "jupytext",
+    "imgaug",
+    "torch",
+    "torchvision",
+    "timm",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
